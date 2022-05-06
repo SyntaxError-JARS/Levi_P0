@@ -1,0 +1,9 @@
+Charles,Charles,cj@mail.com,password,01-01-001
+Buck,Buck,bw@mail.com,hi,02-02-0002
+Charles,Jester,cjester@mail.com,superSecret,09-09-0009
+Maxwell,House,mh@mail.com,coffee,01-02-0003
+brock,brock,brockrock@mail.com,brockrock,01-01-0001
+brock,rock, ,brockrock,01-01-0001
+Charles,Jester,cj@mail.com,pass,01-02-0003
+Soyoung,Lee,SoyoungLee@mail.com,sl1,01-30-2000
+Maxwell,House,mhouse@mail.com,pass,01-20-1900
