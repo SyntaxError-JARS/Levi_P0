@@ -52,12 +52,11 @@ public class user {
 
     @Override // What this is?? Annotation - basically metadata
     public String toString() {
-        return "User{" +
-                "fname='" + firstName + '\'' +
-                ", lname='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+        return
+                "First Name: " + firstName + '\'' +
+                "| Last Name: " + lastName + '\'' +
+                "| Email: " + email + '\'' +
+                "| Password: " + password + '\'';
     }
 }
 

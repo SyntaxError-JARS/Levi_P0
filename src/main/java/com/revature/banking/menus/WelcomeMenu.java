@@ -10,13 +10,14 @@ public class WelcomeMenu extends Menu{
 
     private UserServices userServices;
 
-    public WelcomeMenu(BufferedReader terminalReader, UserServices trainerServices) {
+    public WelcomeMenu(BufferedReader terminalReader, UserServices userServices) {
         super("Welcome", "/welcome", terminalReader);
-        this.userServices = trainerServices;
+        this.userServices = userServices;
     }
 
     @Override
     public void render() throws Exception {
+        System.out.println(" ");
         String welcome = "Welcome to the Levis Bank!";
         String option1 = "1) Login";
         String option2 = "2) Register";

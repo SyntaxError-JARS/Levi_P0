@@ -13,8 +13,6 @@ public class AccountsDao implements Crudable<account>{
 
     @Override
     public account create(account newAccount) {
-        System.out.println("Here is the newUser as it enters our DAO layer: " + newAccount); // What happens here? Java knows to invoke the toString() method when printing the object to the terminal
-
         try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
 
             String sql = "insert into account values ( ? , ? , ? ,default);"; // incomplete sql statement
@@ -27,8 +25,6 @@ public class AccountsDao implements Crudable<account>{
             ps.setString(3, newAccount.getAccountName());
 
             int checkInsert = ps.executeUpdate();
-            System.out.println("Test Print" + checkInsert);
-
             if (checkInsert == 0) {
                 throw new RuntimeException();
             }
@@ -43,7 +39,7 @@ public class AccountsDao implements Crudable<account>{
     public account[] findAll() throws IOException {
 
         account[] userAccounts = new account[10];
-        int index = 0; // we want to keep track of where we are placing each trainer from the file into the the array
+        int index = 0;
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection();) { // try with resoruces, because Connection extends the interface Auto-Closeable
 
@@ -70,7 +66,6 @@ public class AccountsDao implements Crudable<account>{
             e.printStackTrace();
             return null;
         }
-        System.out.println("Returning user information.");
         return userAccounts;
     }
 
@@ -105,6 +100,18 @@ public class AccountsDao implements Crudable<account>{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            //History RECORD
+            String sql = "insert into history values (default,?,'Deposit',?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, loggedinAccount);
+            ps.setInt(2, amount);
+            int rs = ps.executeUpdate(); // remember dql, bc selects are the keywords
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
     public void withdraw(int amount){
         try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
@@ -115,9 +122,19 @@ public class AccountsDao implements Crudable<account>{
             ps.setInt(2, loggedinAccount);
             int rs = ps.executeUpdate(); // remember dql, bc selects are the keywords
 
-            System.out.println("Deposit of " + amount + " was successful");
+            System.out.println("Withdraw of " + amount + " was successful");
 
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            //History RECORD
+            String sql = "insert into history values (default,?,'Withdrawal',?)";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, loggedinAccount);
+            ps.setInt(2, amount);
+            int rs = ps.executeUpdate(); // remember dql, bc selects are the keywords
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

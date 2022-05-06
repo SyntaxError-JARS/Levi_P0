@@ -51,11 +51,10 @@ public class account {
     }
     @Override // What this is?? Annotation - basically metadata
     public String toString() {
-        return "User{" +
-                "email='" + email + '\'' +
-                ", accountname='" + accountName + '\'' +
-                ", accountID='" + accountID + '\'' +
-                ", balance='" + balance + '\'' +
-                '}';
+        return
+                "Email: " + email + '\'' +
+                "| Accountname: " + accountName + '\'' +
+                "| AccountID='" + accountID + '\'' +
+                "| Balance='" + balance + '\'';
     }
 }

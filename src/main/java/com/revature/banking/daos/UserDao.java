@@ -11,7 +11,6 @@ public class UserDao implements Crudable<user> {
 
     @Override
     public user create(user newUser) {
-        System.out.println("Here is the newUser as it enters our DAO layer: " + newUser); // What happens here? Java knows to invoke the toString() method when printing the object to the terminal
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
 
@@ -26,7 +25,6 @@ public class UserDao implements Crudable<user> {
             ps.setString(4, newUser.getPassword());
 
             int checkInsert = ps.executeUpdate();
-            System.out.println("Test Print" + checkInsert);
 
             if (checkInsert == 0) {
                 throw new RuntimeException();
@@ -62,15 +60,13 @@ public class UserDao implements Crudable<user> {
                 user1.setEmail(rs.getString("email"));
 
                 users[index] = user1;
-                index++; // increment the index by 1, must occur after the trainer[index] re-assignment
+                index++;
             }
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
 
-
-        System.out.println("Returning user infomation.");
         return users;
     }
 

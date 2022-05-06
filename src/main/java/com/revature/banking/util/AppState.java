@@ -3,6 +3,7 @@ package com.revature.banking.util;
 import com.revature.banking.daos.AccountsDao;
 import com.revature.banking.menus.*;
 import com.revature.banking.services.UserServices;
+import com.revature.banking.util.logging.Logger;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,9 +18,13 @@ public class AppState {
     private AccountsMenu accountsMenu;
     private LoginMenu loginMenu;
     private RegisterAccountMenu registerAccountMenu;
+    private final Logger logger;
     // once we add register we will need private final MenuRouter router;
 
     public AppState() {
+
+        logger = Logger.getLogger(true);
+
         // 2. Generating instance of AppState
         isRunning = true;
         BufferedReader terminalReader = new BufferedReader(new InputStreamReader(System.in));

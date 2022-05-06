@@ -31,7 +31,6 @@ public class RegisterAccountMenu extends Menu{
         String accountName = terminalReader.readLine();
 
         account newAccount = new account(loggedinEmail, accountName, accountID);
-        System.out.println("Here is the trainer that was provided by the user: " + newAccount);
         accountServices.registerAccount(newAccount);
         menulocation=3;
     }

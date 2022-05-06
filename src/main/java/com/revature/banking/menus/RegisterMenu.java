@@ -45,10 +45,7 @@ public class RegisterMenu extends Menu{
         }
 
 
-        // Trainer trainer = new Trainer(); // why is this red?? there isn't a No-Arg constructor
-        // What's happening here? Intialization a new Trainer object in memory
         user newUser = new user(fname, lname, email, password);
-        System.out.println("Here is the trainer that was provided by the user: " + newUser);
-        userServices.registerTrainer(newUser);
+        userServices.registerUser(newUser);
     }
 }

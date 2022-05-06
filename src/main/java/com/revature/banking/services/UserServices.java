@@ -12,7 +12,6 @@ public class UserServices {
     private UserDao userDao = new UserDao();
 
     public void readUsers(){
-        System.out.println("Begin reading Users in our file database.");
         user[] users = new user[0];
         try {
             users = userDao.findAll();
@@ -41,8 +40,7 @@ public class UserServices {
 
     }
 
-    public boolean registerTrainer(user newUser){
-        System.out.println("User trying to be registered: " + newUser);
+    public boolean registerUser(user newUser){
         if(!validateUserInput(newUser)){ // checking if false
             System.out.println("User was not validated");
             throw new RuntimeException();
@@ -51,17 +49,17 @@ public class UserServices {
         // TODO: Will implement with JDBC (connecting to our database)
         validateEmailNotUsed(newUser.getEmail());
 
-        user persistedTrainer = userDao.create(newUser);
+        user persistedUser = userDao.create(newUser);
 
-        if(persistedTrainer == null){
+        if(persistedUser == null){
             throw new RuntimeException();
         }
-        System.out.println("Trainer has been persisted: " + newUser);
+
+        System.out.println("User has been registered: " + newUser+ " Login with user now");
         return true;
     }
 
     private boolean validateUserInput(user newUser) {
-        System.out.println("Validating Trainer: " + newUser);
         if(newUser == null) return false;
         if(newUser.getFirstName() == null || newUser.getFirstName().trim().equals("")) return false;
         if(newUser.getLastName() == null || newUser.getLastName().trim().equals("")) return false;
