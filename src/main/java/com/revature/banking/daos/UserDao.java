@@ -176,4 +176,34 @@ public class UserDao implements Crudable<user> {
         }
 
     }
+
+    public user authenticateUser(String email, String password) {
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()){
+            String sql = "select * from bank_user where email = ? and password = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+
+            if(!rs.next()){
+                return null;
+            }
+
+            user user = new user();
+
+            user.setFirstName(rs.getString("first_name")); // this column lable MUST MATCH THE DB
+            user.setLastName(rs.getString("last_name"));
+            user.setPassword(rs.getString("password"));
+            user.setEmail(rs.getString("email"));
+
+            return user;
+
+        } catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+
+    }
 }

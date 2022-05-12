@@ -5,12 +5,10 @@ import com.revature.banking.models.account;
 
 import java.io.IOException;
 
-import static com.revature.banking.MainDriver.loggedinEmail;
-
 public class AccountServices {
     private AccountsDao accountsDao = new AccountsDao();
 
-    public void readAccounts() {
+    public account[] readAccounts() {
         account[] accounts = new account[0];
         try {
             accounts = accountsDao.findAll();
@@ -21,6 +19,7 @@ public class AccountServices {
         } catch (IOException | NullPointerException e) {
             // e.printStackTrace();
         }
+        return accounts;
     }
     public void deposit(int amount){
         accountsDao.deposit(amount);

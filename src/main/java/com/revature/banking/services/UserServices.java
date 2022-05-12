@@ -1,17 +1,20 @@
 package com.revature.banking.services;
 
 import com.revature.banking.daos.UserDao;
+import com.revature.banking.exceptions.InvalidRequestException;
+import com.revature.banking.exceptions.AuthenticationException;
 import com.revature.banking.models.user;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 
 public class UserServices {
 
     private UserDao userDao = new UserDao();
 
-    public void readUsers(){
+    public UserServices(UserDao userDao) {
+    }
+
+    public user[] readUsers(){
         user[] users = new user[0];
         try {
             users = userDao.findAll();
@@ -23,6 +26,7 @@ public class UserServices {
         } catch (IOException | NullPointerException e) {
             // e.printStackTrace();
         }
+        return users;
     }
 
     // TODO: Implement me to check that the email is not already in our database.
@@ -65,5 +69,20 @@ public class UserServices {
         if(newUser.getLastName() == null || newUser.getLastName().trim().equals("")) return false;
         if(newUser.getEmail() == null || newUser.getEmail().trim().equals("")) return false;
         return newUser.getPassword() != null || !newUser.getPassword().trim().equals("");
+    }
+    public user authenticateUser(String email, String password){
+
+        if(password == null || password.trim().equals("") || password == null || password.trim().equals("")) {
+            throw new InvalidRequestException("Either username or password is an invalid entry. Please try logging in again");
+        }
+
+        user authenticatedUser = userDao.authenticateUser(email, password);
+
+        if (authenticatedUser == null){
+            throw new AuthenticationException("Unauthenticated user, information provided was not consistent with our database.");
+        }
+
+        return authenticatedUser;
+
     }
 }
