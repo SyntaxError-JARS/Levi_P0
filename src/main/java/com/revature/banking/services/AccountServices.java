@@ -1,17 +1,23 @@
 package com.revature.banking.services;
 
 import com.revature.banking.daos.AccountsDao;
+import com.revature.banking.exceptions.ResourcePersistanceException;
 import com.revature.banking.models.account;
+import com.revature.banking.models.user;
+import com.revature.banking.util.logging.Logger;
 
 import java.io.IOException;
 
 public class AccountServices {
     private AccountsDao accountsDao = new AccountsDao();
 
-    public account[] readAccounts() {
+    public AccountServices(AccountsDao accountsDao) {
+    }
+
+    public account[] readAccounts(String email) {
         account[] accounts = new account[0];
         try {
-            accounts = accountsDao.findAll();
+            accounts = accountsDao.findAll(email);
             for (int i = 0; i < accounts.length; i++) {
                 account account = accounts[i];
                 System.out.println(account.toString());
@@ -21,11 +27,12 @@ public class AccountServices {
         }
         return accounts;
     }
-    public void deposit(int amount){
-        accountsDao.deposit(amount);
+    public void deposit(String value, String id){
+        accountsDao.deposit(value, id);
     }
-    public void withdraw(int amount){
-        accountsDao.withdraw(amount);
+    public void withdraw(String value, String id){
+
+        accountsDao.withdraw(value, id);
     }
 
     public boolean registerAccount(account newAccount){
@@ -49,5 +56,15 @@ public class AccountServices {
         if(newAccount.getAccountID() == 0) return false;
         if(newAccount.getAccountName() == null || newAccount.getAccountName().trim().equals("")) return false;
         return newAccount.getEmail() != null || !newAccount.getEmail().trim().equals("");
+    }
+    public account readAccountById(String id) {
+        Logger logger = null;
+        account account = new account();
+        try {
+            account = accountsDao.findById(id);
+        }catch (ResourcePersistanceException e){
+            logger.warn("Id was not found");
+        }
+        return account;
     }
 }

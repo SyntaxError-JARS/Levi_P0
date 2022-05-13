@@ -1,6 +1,7 @@
 package com.revature.banking.daos;
 
 import com.revature.banking.models.account;
+import com.revature.banking.models.user;
 import com.revature.banking.util.ConnectionFactory;
 
 import java.io.IOException;
@@ -36,7 +37,12 @@ public class AccountsDao implements Crudable<account>{
         return newAccount;
     }
 
+    @Override
     public account[] findAll() throws IOException {
+        return new account[0];
+    }
+
+    public account[] findAll(String email) throws IOException {
 
         account[] userAccounts = new account[10];
         int index = 0;
@@ -46,7 +52,7 @@ public class AccountsDao implements Crudable<account>{
             String sql = "select * from account where email = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
 
-            ps.setString(1, loggedinEmail); // Wrapper class example
+            ps.setString(1, email); // Wrapper class example
             ResultSet rs = ps.executeQuery(); // remember dql, bc selects are the keywords
 
 
@@ -71,7 +77,37 @@ public class AccountsDao implements Crudable<account>{
 
     @Override
     public account findById(String id) {
-        return null;
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
+
+            String sql = "select * from account where account_ID = ?";
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            ps.setInt(1, Integer.parseInt(id)); // Wrapper class example
+            ResultSet rs = ps.executeQuery(); // remember dql, bc selects are the keywords
+            System.out.println(ps);
+
+            if (rs.next() != false) {
+
+                account account1 = new account();
+
+                account1.setAccountID(rs.getInt("account_ID")); // this column lable MUST MATCH THE DB
+                account1.setEmail(rs.getString("email"));
+                account1.setAccountName(rs.getString("account_name"));
+                account1.setBalance(rs.getInt("balance"));
+
+                return account1;
+            } else {
+                System.out.println("User not found");
+                return null;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     @Override
@@ -84,14 +120,14 @@ public class AccountsDao implements Crudable<account>{
         return false;
     }
 
-    public void deposit(int amount){
+    public void deposit(String amount, String id){
         try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
 
             String sql = "update account set balance=balance+? where account_ID=?";
 
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, amount);
-            ps.setInt(2, loggedinAccount);
+            ps.setInt(1, Integer.parseInt(amount));
+            ps.setInt(2, Integer.parseInt(id));
             int rs = ps.executeUpdate(); // remember dql, bc selects are the keywords
 
             System.out.println("Deposit of " + amount + " was successful");
@@ -104,8 +140,8 @@ public class AccountsDao implements Crudable<account>{
             //History RECORD
             String sql = "insert into history values (default,?,'Deposit',?)";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, loggedinAccount);
-            ps.setInt(2, amount);
+            ps.setInt(1, Integer.parseInt(id));
+            ps.setInt(2, Integer.parseInt(amount));
             int rs = ps.executeUpdate(); // remember dql, bc selects are the keywords
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -113,13 +149,13 @@ public class AccountsDao implements Crudable<account>{
 
 
     }
-    public void withdraw(int amount){
+    public void withdraw(String amount, String id){
         try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
 
-            String sql = "update account set balance=balance+? where account_ID=?";
+            String sql = "update account set balance=balance-? where account_ID=?";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, -amount);
-            ps.setInt(2, loggedinAccount);
+            ps.setInt(1, Integer.parseInt(amount));
+            ps.setInt(2, Integer.parseInt(id));
             int rs = ps.executeUpdate(); // remember dql, bc selects are the keywords
 
             System.out.println("Withdraw of " + amount + " was successful");
@@ -132,8 +168,8 @@ public class AccountsDao implements Crudable<account>{
             //History RECORD
             String sql = "insert into history values (default,?,'Withdrawal',?)";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, loggedinAccount);
-            ps.setInt(2, amount);
+            ps.setInt(1, Integer.parseInt(id));
+            ps.setInt(2, Integer.parseInt(amount));
             int rs = ps.executeUpdate(); // remember dql, bc selects are the keywords
         } catch (SQLException e) {
             throw new RuntimeException(e);

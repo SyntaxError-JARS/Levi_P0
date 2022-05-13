@@ -82,6 +82,7 @@ public class UserDao implements Crudable<user> {
 
             ps.setString(1, email); // Wrapper class example
             ResultSet rs = ps.executeQuery(); // remember dql, bc selects are the keywords
+            System.out.println(ps);
 
             if (rs.next() != false) {
 

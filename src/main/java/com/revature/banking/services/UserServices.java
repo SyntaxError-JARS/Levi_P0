@@ -3,9 +3,14 @@ package com.revature.banking.services;
 import com.revature.banking.daos.UserDao;
 import com.revature.banking.exceptions.InvalidRequestException;
 import com.revature.banking.exceptions.AuthenticationException;
+import com.revature.banking.exceptions.ResourcePersistanceException;
 import com.revature.banking.models.user;
+import com.revature.banking.util.logging.Logger;
+import sun.rmi.runtime.Log;
+
 
 import java.io.IOException;
+
 
 public class UserServices {
 
@@ -44,7 +49,7 @@ public class UserServices {
 
     }
 
-    public boolean registerUser(user newUser){
+    public user registerUser(user newUser){
         if(!validateUserInput(newUser)){ // checking if false
             System.out.println("User was not validated");
             throw new RuntimeException();
@@ -60,7 +65,7 @@ public class UserServices {
         }
 
         System.out.println("User has been registered: " + newUser+ " Login with user now");
-        return true;
+        return persistedUser;
     }
 
     private boolean validateUserInput(user newUser) {
@@ -84,5 +89,16 @@ public class UserServices {
 
         return authenticatedUser;
 
+    }
+
+    public user readUserById(String email) {
+        Logger logger = null;
+        user user = new user();
+        try {
+            user = userDao.findById(email);
+        }catch (ResourcePersistanceException e){
+            logger.warn("Id was not found");
+        }
+        return user;
     }
 }

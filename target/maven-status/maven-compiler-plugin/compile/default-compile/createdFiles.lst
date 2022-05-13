@@ -12,6 +12,7 @@ com\revature\banking\services\HistoryServices.class
 com\revature\banking\util\logging\Logger.class
 com\revature\banking\daos\AccountsDao.class
 com\revature\banking\exceptions\ResourcePersistanceException.class
+com\revature\banking\web\servlets\AccountServlet.class
 com\revature\banking\services\AccountServices.class
 com\revature\banking\models\account.class
 com\revature\banking\web\servlets\UserServlet.class
