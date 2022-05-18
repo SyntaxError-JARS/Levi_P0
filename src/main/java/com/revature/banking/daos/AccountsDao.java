@@ -75,6 +75,7 @@ public class AccountsDao implements Crudable<account>{
         return accounts;
     }
 
+
     @Override
     public account findById(String id) {
 
@@ -117,7 +118,35 @@ public class AccountsDao implements Crudable<account>{
 
     @Override
     public boolean delete(String id) {
-        return false;
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
+
+            String sql1 = "delete from history where account_id= ? ";
+            String sql2 = "delete from account where account_id = ? ";
+
+            PreparedStatement ps = conn.prepareStatement(sql1);
+            PreparedStatement ps1 = conn.prepareStatement(sql2);
+            ps.setInt(1, Integer.parseInt(id)); // Wrapper class example
+            ps1.setInt(1, Integer.parseInt(id)); // Wrapper class example
+            int rs = ps.executeUpdate(); // remember dql, bc selects are the keywords
+            int rs1 = ps1.executeUpdate();
+
+
+        } catch (SQLException e) {
+            try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
+
+                String sql2 = "delete from account where account_id = ?";
+
+                PreparedStatement ps1 = conn.prepareStatement(sql2);
+                ps1.setInt(1, Integer.parseInt(id)); // Wrapper class example
+                int rs1 = ps1.executeUpdate();
+
+
+            } catch (SQLException i) {
+                throw new RuntimeException(i);
+            }
+        }
+        return true;
     }
 
     public void deposit(String amount, String id) {

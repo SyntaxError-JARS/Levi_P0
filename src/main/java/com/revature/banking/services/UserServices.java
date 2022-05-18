@@ -102,4 +102,24 @@ public class UserServices {
         }
         return user;
     }
+    public boolean deleteUser(String email) {
+        if(!validateEmailUsed(email)){ // checking if false
+            System.out.println("User was not found");
+            throw new RuntimeException();
+        }
+
+        boolean work = userDao.delete(email);
+
+        if (work == true) {
+
+            System.out.println("User has been deleted: " + email);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean validateEmailUsed(String email){
+        userDao.checkEmail(email);
+        return true;
+    }
 }

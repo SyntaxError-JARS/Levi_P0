@@ -3,6 +3,7 @@ package com.revature.banking.daos;
 import com.revature.banking.models.user;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface Crudable<T> {
@@ -19,6 +20,6 @@ public interface Crudable<T> {
     boolean update(T updatedObj);
 
     //Delete
-    boolean delete(String id);
+    boolean delete(String id) throws SQLException;
 
 }

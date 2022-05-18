@@ -59,7 +59,7 @@ public class UserDao implements Crudable<user> {
                 user1.setPassword(rs.getString("password"));
                 user1.setEmail(rs.getString("email"));
 
-                users.add(index,user1);
+                users.add(index, user1);
                 index++;
             }
         } catch (SQLException e) {
@@ -131,8 +131,37 @@ public class UserDao implements Crudable<user> {
 
     @Override
     public boolean delete(String email) {
-        return false;
+
+        try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
+
+            String sql1 = "delete from account where account_id = ? ";
+            String sql2 = "delete from bank_user where email= ? ";
+
+            PreparedStatement ps = conn.prepareStatement(sql1);
+            PreparedStatement ps1 = conn.prepareStatement(sql2);
+            ps.setString(1, email); // Wrapper class example
+            ps1.setString(1, email); // Wrapper class example
+            int rs = ps.executeUpdate(); // remember dql, bc selects are the keywords
+            int rs1 = ps1.executeUpdate();
+
+
+        } catch (SQLException e) {
+            try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
+
+                String sql2 = "delete from bank_user where email= ? ";
+
+                PreparedStatement ps1 = conn.prepareStatement(sql2);
+                ps1.setString(1, email); // Wrapper class example
+                int rs1 = ps1.executeUpdate();
+
+
+            } catch (SQLException i) {
+                throw new RuntimeException(i);
+            }
+        }
+        return true;
     }
+
 
     public boolean checkEmail(String email) {
 
