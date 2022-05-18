@@ -6,8 +6,7 @@ import com.revature.banking.util.ConnectionFactory;
 
 import java.io.IOException;
 import java.sql.*;
-
-import static com.revature.banking.MainDriver.*;
+import java.util.ArrayList;
 
 public class AccountsDao implements Crudable<account>{
 
@@ -38,13 +37,14 @@ public class AccountsDao implements Crudable<account>{
     }
 
     @Override
-    public account[] findAll() throws IOException {
-        return new account[0];
+    public ArrayList<user> findAll() throws IOException {
+        return null;
     }
 
-    public account[] findAll(String email) throws IOException {
 
-        account[] userAccounts = new account[10];
+    public ArrayList<account> findAll(String email) throws IOException {
+
+        ArrayList<account> accounts = new ArrayList<>();
         int index = 0;
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection();) { // try with resoruces, because Connection extends the interface Auto-Closeable
@@ -64,7 +64,7 @@ public class AccountsDao implements Crudable<account>{
                 account1.setAccountName(rs.getString("account_name"));
                 account1.setBalance(rs.getInt("balance"));
 
-                userAccounts[index] = account1;
+                accounts.add(index,account1);
                 index++;
             }
         } catch (
@@ -72,7 +72,7 @@ public class AccountsDao implements Crudable<account>{
             e.printStackTrace();
             return null;
         }
-        return userAccounts;
+        return accounts;
     }
 
     @Override
@@ -120,7 +120,7 @@ public class AccountsDao implements Crudable<account>{
         return false;
     }
 
-    public void deposit(String amount, String id){
+    public void deposit(String amount, String id) {
         try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
 
             String sql = "update account set balance=balance+? where account_ID=?";
@@ -136,9 +136,16 @@ public class AccountsDao implements Crudable<account>{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        String sql = "";
+        if (Integer.parseInt(amount) >= 0) {
+            sql = "insert into history values (default,?,'Deposit',?)";
+        } else {
+            sql = "insert into history values (default,?,'Withdraw',?)";
+        }
+
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             //History RECORD
-            String sql = "insert into history values (default,?,'Deposit',?)";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, Integer.parseInt(id));
             ps.setInt(2, Integer.parseInt(amount));
@@ -146,9 +153,8 @@ public class AccountsDao implements Crudable<account>{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
+
     public void withdraw(String amount, String id){
         try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
 

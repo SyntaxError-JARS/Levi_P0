@@ -1,11 +1,11 @@
 package com.revature.banking.daos;
 
-import com.revature.banking.models.account;
 import com.revature.banking.models.user;
 import com.revature.banking.util.ConnectionFactory;
 
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class UserDao implements Crudable<user> {
 
@@ -38,9 +38,9 @@ public class UserDao implements Crudable<user> {
     }
 
     @Override
-    public user[] findAll() throws IOException {
+    public ArrayList<user> findAll() throws IOException {
 
-        user[] users = new user[10];
+        ArrayList<user> users = new ArrayList<>();
         int index = 0;
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
@@ -59,7 +59,7 @@ public class UserDao implements Crudable<user> {
                 user1.setPassword(rs.getString("password"));
                 user1.setEmail(rs.getString("email"));
 
-                users[index] = user1;
+                users.add(index,user1);
                 index++;
             }
         } catch (SQLException e) {
@@ -67,6 +67,7 @@ public class UserDao implements Crudable<user> {
             return null;
         }
 
+        System.out.println(users);
         return users;
     }
 

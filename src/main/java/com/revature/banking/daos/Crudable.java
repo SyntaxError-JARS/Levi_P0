@@ -1,9 +1,9 @@
 package com.revature.banking.daos;
 
-import com.revature.banking.models.account;
+import com.revature.banking.models.user;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public interface Crudable<T> {
 
@@ -11,7 +11,7 @@ public interface Crudable<T> {
     T create(T newObject);
 
     // Read
-    T[] findAll() throws IOException;
+    ArrayList<user> findAll() throws IOException;
 
     T findById(String id);
 

@@ -1,74 +1,54 @@
 package com.revature.banking.web.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.banking.daos.UserDao;
 import com.revature.banking.exceptions.ResourcePersistanceException;
+import com.revature.banking.models.account;
+import com.revature.banking.models.history;
 import com.revature.banking.models.user;
+import com.revature.banking.services.HistoryServices;
 import com.revature.banking.services.UserServices;
 import com.revature.banking.util.logging.Logger;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class UserServlet extends HttpServlet {
-    private final UserServices userServices;
+public class HistoryServlet extends HttpServlet {
+
+    private final HistoryServices historyServices;
     private final ObjectMapper mapper;
     private final Logger logger = Logger.getLogger();
 
-    public UserServlet(UserServices userServices, ObjectMapper mapper) {
-        this.userServices = userServices;
+    public HistoryServlet(HistoryServices historyServices, ObjectMapper mapper) {
+        this.historyServices = historyServices;
         this.mapper = mapper;
     }
 
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         if (!checkAuth(req, resp)) return;
 
-        if (req.getParameter("email") != null) {
-            user user;
+        if (req.getParameter("id") != null) {
+            ArrayList<history> history1 = new ArrayList<>();
             try {
-                user = userServices.readUserById(req.getParameter("email")); // EVERY PARAMETER RETURN FROM A URL IS A STRING
+                history1 = historyServices.readHistory(req.getParameter("id")); // EVERY PARAMETER RETURN FROM A URL IS A STRING
 
             } catch (ResourcePersistanceException e) {
                 resp.setStatus(404);
                 return;
             }
-            String payload = mapper.writeValueAsString(user);
+            String payload = mapper.writeValueAsString(history1);
             resp.getWriter().write(payload);
             return;
         }
-        resp.getWriter().write("no returns");
-
-        List<user> users = (userServices.readUsers());
-        String payload = mapper.writeValueAsString(users);
-
-        resp.getWriter().write(payload);
     }
-
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        //if(!checkAuth(req, resp)) return;
-        resp.getWriter().write("1");
-        user newUser = mapper.readValue(req.getInputStream(), user.class); // from JSON to Java Object (user)
-        resp.getWriter().write("2");
-        user persistedUser = userServices.registerUser(newUser);
-        resp.getWriter().write("3");
-
-        String payload = mapper.writeValueAsString(persistedUser); // Mapping from Java Object (user) to JSON
-
-        resp.getWriter().write("Persisted the provided account as show below \n");
-        resp.getWriter().write(payload);
-        resp.setStatus(201);
-    }
-
     protected boolean checkAuth (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession httpSession = req.getSession();
         if (httpSession.getAttribute("authUser") == null){
@@ -79,6 +59,4 @@ public class UserServlet extends HttpServlet {
         return true;
 
     }
-
-
 }

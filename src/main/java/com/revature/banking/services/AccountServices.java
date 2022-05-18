@@ -7,6 +7,7 @@ import com.revature.banking.models.user;
 import com.revature.banking.util.logging.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class AccountServices {
     private AccountsDao accountsDao = new AccountsDao();
@@ -14,12 +15,12 @@ public class AccountServices {
     public AccountServices(AccountsDao accountsDao) {
     }
 
-    public account[] readAccounts(String email) {
-        account[] accounts = new account[0];
+    public ArrayList<account> readAccounts(String email) {
+        ArrayList<account> accounts = new ArrayList<>();
         try {
             accounts = accountsDao.findAll(email);
-            for (int i = 0; i < accounts.length; i++) {
-                account account = accounts[i];
+            for (int i = 0; i < accounts.size(); i++) {
+                account account = accounts.get(i);
                 System.out.println(account.toString());
             }
         } catch (IOException | NullPointerException e) {

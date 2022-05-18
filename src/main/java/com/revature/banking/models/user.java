@@ -6,7 +6,7 @@ public class user {
     String email;
     String firstName;
     String lastName;
-    @JsonIgnore
+    //@JsonIgnore
     String password;
 
     public user(String firstName, String lastName, String email, String password){

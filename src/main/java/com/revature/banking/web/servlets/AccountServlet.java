@@ -44,7 +44,7 @@ public class AccountServlet extends HttpServlet {
             return;
         }
 
-        List<account> accounts = Arrays.asList(accountServices.readAccounts(req.getParameter("email")));
+        List<account> accounts = (accountServices.readAccounts(req.getParameter("email")));
         String payload = mapper.writeValueAsString(accounts);
 
         resp.getWriter().write(payload);

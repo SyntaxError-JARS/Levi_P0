@@ -37,7 +37,7 @@ public class Logger {
 
     public void log(String message){
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        URL file = loader.getResource("pokedex.log");
+        URL file = loader.getResource("banking.log");
 
         try (Writer logWriter = new FileWriter(String.valueOf(file).split(":")[1], true);){
             logWriter.write(LocalDateTime.now().toString() + " LOG: " + message + "\n");
@@ -54,7 +54,7 @@ public class Logger {
 
     public void info(String message){
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        URL file = loader.getResource("pokedex.log");
+        URL file = loader.getResource("banking.log");
 
         try (Writer logWriter = new FileWriter(String.valueOf(file).split(":")[1], true);){
             logWriter.write(LocalDateTime.now().toString() + " INFO: " + message + "\n");
@@ -70,7 +70,7 @@ public class Logger {
 
     public void debug(String message){
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        URL file = loader.getResource("pokedex.log");
+        URL file = loader.getResource("banking.log");
 
         try (Writer logWriter = new FileWriter(String.valueOf(file).split(":")[1], true);){
             logWriter.write(LocalDateTime.now().toString() + " DEBUG: " + message + "\n");
@@ -86,7 +86,7 @@ public class Logger {
 
     public void warn(String message){
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        URL file = loader.getResource("pokedex.log");
+        URL file = loader.getResource("banking.log");
 
         try (Writer logWriter = new FileWriter(String.valueOf(file).split(":")[1], true);){
             logWriter.write(LocalDateTime.now().toString() + " WARN: " + message + "\n");

@@ -10,6 +10,7 @@ import sun.rmi.runtime.Log;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class UserServices {
@@ -19,13 +20,13 @@ public class UserServices {
     public UserServices(UserDao userDao) {
     }
 
-    public user[] readUsers(){
-        user[] users = new user[0];
+    public ArrayList<user> readUsers(){
+        ArrayList<user> users = new ArrayList<>();
         try {
             users = userDao.findAll();
             System.out.println("All users have been found here are the results: \n");
-            for (int i = 0; i < users.length; i++) {
-                user user = users[i];
+            for (int i = 0; i < users.size(); i++) {
+                user user = users.get(i);
                 System.out.println(user.toString());
             }
         } catch (IOException | NullPointerException e) {

@@ -1,6 +1,5 @@
 package com.revature.banking.daos;
 
-import com.revature.banking.models.account;
 import com.revature.banking.models.history;
 import com.revature.banking.models.user;
 import com.revature.banking.util.ConnectionFactory;
@@ -10,9 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static com.revature.banking.MainDriver.loggedinAccount;
-import static com.revature.banking.MainDriver.loggedinEmail;
 
 public class HistoryDao implements Crudable<history>{
 
@@ -22,9 +21,14 @@ public class HistoryDao implements Crudable<history>{
     }
 
     @Override
-    public history[] findAll() throws IOException {
+    public ArrayList<user> findAll() throws IOException {
+        return null;
+    }
 
-        history[] userHistory = new history[50];
+    //@Override
+    public ArrayList<history> findAll(String ID) throws IOException {
+
+        ArrayList<history> histories = new ArrayList<>();
         int index = 0;
 
         try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
@@ -32,7 +36,7 @@ public class HistoryDao implements Crudable<history>{
             String sql = "select * from history where account_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
 
-            ps.setInt(1, Integer.valueOf(loggedinAccount)); // Wrapper class example
+            ps.setInt(1, Integer.valueOf(ID)); // Wrapper class example
             ResultSet rs = ps.executeQuery(); // remember dql, bc selects are the keywords
 
 
@@ -44,7 +48,7 @@ public class HistoryDao implements Crudable<history>{
                 history1.setAccountID(rs.getInt("account_ID"));
                 history1.setValue(rs.getInt("value"));
 
-                userHistory[index] = history1;
+                histories.add(index,history1);
                 index++;
             }
         } catch (
@@ -52,7 +56,7 @@ public class HistoryDao implements Crudable<history>{
             e.printStackTrace();
             return null;
         }
-        return userHistory;
+        return histories;
     }
 
     @Override
