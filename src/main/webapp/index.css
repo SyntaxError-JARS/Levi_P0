@@ -50,7 +50,12 @@ form {
   
   /* Add padding to containers */
   .container {
-    padding: 16px;
+    background-color: #f4f4f4; 
+    /* width: 100px; 
+    height:50px; 
+    margin: 10px;  */
+    text-align: left; 
+    font-size: 15px;
   }
   
   /* The "Forgot password" text */
@@ -97,3 +102,11 @@ h3 {
     color:#009900; 
     font-weight:bold; 
 }                     
+.Title {
+  background-color: #f4f4f4; 
+  width: 100px; 
+  height:50px; 
+  margin: 10px; 
+  text-align: center; 
+  font-size: 40px; 
+}

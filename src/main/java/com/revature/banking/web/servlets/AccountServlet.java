@@ -53,15 +53,11 @@ public class AccountServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         //if(!checkAuth(req, resp)) return;
-        resp.getWriter().write("1");
         account newAccount = mapper.readValue(req.getInputStream(), account.class); // from JSON to Java Object (user)
-        resp.getWriter().write("2");
         accountServices.registerAccount(newAccount);
-        resp.getWriter().write("3");
 
         String payload = mapper.writeValueAsString(newAccount); // Mapping from Java Object (user) to JSON
 
-        resp.getWriter().write("Persisted the provided user as show below \n");
         resp.getWriter().write(payload);
         resp.setStatus(201);
     }
